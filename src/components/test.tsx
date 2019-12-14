@@ -1,11 +1,11 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 
 interface ITest {
   props1: boolean;
 }
 
 const Test: FunctionComponent<ITest> = () => {
-  return null;
+  return <strong>test</strong>;
 };
 
 export default Test;
