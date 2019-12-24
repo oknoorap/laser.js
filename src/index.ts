@@ -1,3 +1,4 @@
-import Test from "./components/test";
+import Game from "./game";
+import Scene from "./scene";
 
-export { Test };
+export { Game, Scene };

@@ -4,14 +4,18 @@
     "jsx": "react",
     "target": "es5",
     "declaration": true,
-    "noImplicitAny": true,
-    "removeComments": true,
     "esModuleInterop": true,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM", "ScriptHost"],
     "baseUrl": "./src",
     "outDir": "./dist",
-    "lib": ["esnext"]
+    "paths": {
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"]
+    }
   },
   "typeRoots": ["./node_modules/phaser/types"],
-  "types": ["phaser"],
-  "include": ["src"]
+  "types": ["Phaser"],
+  "include": ["./src"]
 }
