@@ -1,3 +1,4 @@
 export enum EComponentType {
-  Game = "game"
+  Game = "game",
+  Scene = "scene"
 }

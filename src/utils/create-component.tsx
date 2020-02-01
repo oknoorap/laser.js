@@ -1,20 +1,31 @@
-import React, { ReactNode, useRef, Ref, useImperativeHandle } from "react";
+import React, {
+  ReactNode,
+  Ref,
+  useRef,
+  useState,
+  useImperativeHandle
+} from "react";
 import { EComponentType } from "./common-typings";
 
-interface IGameData {
+export interface IComponentData {
   type: EComponentType;
   props: any;
 }
 
-interface IComponent {
+export interface IComponent {
+  ref?: Ref<IComponentData>;
+}
+
+interface IComponentOpts {
   type: EComponentType;
-  children: ReactNode;
-  ref: Ref<IGameData>;
+  children?: ReactNode;
+  ref: Ref<IComponentData>;
   props: any;
 }
 
-const createComponent = ({ type, props, ref, children }: IComponent) => {
+const createComponent = ({ type, props, ref, children }: IComponentOpts) => {
   const scriptRef = useRef();
+
   useImperativeHandle(ref, () => ({
     type,
     props

@@ -1,9 +1,12 @@
 import { ReactElement } from "react";
 import ReactReconciler, { Fiber } from "react-reconciler";
-import * as Phaser from "phaser";
 
 import { EComponentType } from "../utils/common-typings";
 import { getPropsAttr, getTypeAttr, generateId } from "../utils/helpers";
+import GameClass from "./lib/game";
+import SceneClass from "./lib/scene";
+
+const sceneManagers = [];
 
 const reconciler = ReactReconciler({
   isPrimaryRenderer: true,
@@ -11,20 +14,32 @@ const reconciler = ReactReconciler({
   supportsPersistence: true,
   supportsHydration: true,
 
-  createInstance(_: string, $props: any) {
-    const type = getTypeAttr($props);
-    const props = getPropsAttr($props);
+  createInstance(_: string, props: any) {
+    const type = getTypeAttr(props);
+    const settings = getPropsAttr(props);
+    let componentInstance;
 
     switch (type) {
       case EComponentType.Game:
-        props.id = generateId("game");
-        return class extends Phaser.Game {
-          constructor(parent) {
-            props.parent = parent;
-            super(props);
-          }
-        };
+        componentInstance = new GameClass({
+          id: generateId("game"),
+          ...settings
+        });
+        break;
+
+      case EComponentType.Scene:
+        componentInstance = new SceneClass({
+          id: generateId("scene"),
+          key: settings.name,
+          ...settings
+        });
+        break;
+
+      default:
+        break;
     }
+
+    return componentInstance;
   },
   createTextInstance(
     text,
@@ -38,21 +53,29 @@ const reconciler = ReactReconciler({
   },
 
   // Appender
-  appendChildToContainer(container: any, GameClass: any) {
-    if (!GameClass) {
+  appendChildToContainer(container: any, gameInstance) {
+    if (!gameInstance || !(gameInstance instanceof GameClass)) {
       console.warn("The first child of game should be `<Game />` component.");
     }
 
-    new GameClass(container);
-    // console.log("appendChildToContainer", { container, child });
-    // container.appendChild(document.createTextNode(JSON.stringify(child)));
+    const game = gameInstance as GameClass;
+
+    // Add Scenes.
+    for (const scene of sceneManagers) {
+      game.addScene((scene as SceneClass).render());
+    }
+
+    game.setContainer(container);
+    game.render();
   },
   appendChild(parent: any, child) {
-    console.log("hello", { parent, child });
+    // console.log("hello", { parent, child });
     // parent.appendChild(child);
   },
   appendInitialChild(parent: any, child) {
-    console.log("appendInitialChild", { parent, child });
+    if (child instanceof SceneClass) {
+      sceneManagers.push(child);
+    }
     // if (parent instanceof A && child instanceof B) {
     //   parent.add(child);
     // }
