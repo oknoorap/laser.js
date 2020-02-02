@@ -3,7 +3,7 @@ import eol from "eol";
 import SceneManager from "../managers/scene";
 import ObjectManager from "../managers/object";
 import { EComponentType } from "../../types/enum";
-import { isComponentEqual } from "../../utils/helpers";
+import { isComponentType } from "../../utils/helpers";
 
 const appendInitialChild = (sceneManagers: SceneManager[]) => (
   parent: any,
@@ -14,7 +14,7 @@ const appendInitialChild = (sceneManagers: SceneManager[]) => (
   }
 
   if (parent instanceof SceneManager && child instanceof ObjectManager) {
-    const isText = isComponentEqual(child, EComponentType.Text);
+    const isText = isComponentType(child, EComponentType.Text);
 
     switch (true) {
       case isText:
@@ -27,7 +27,7 @@ const appendInitialChild = (sceneManagers: SceneManager[]) => (
   }
 
   if (parent instanceof ObjectManager) {
-    const isText = isComponentEqual(parent, EComponentType.Text);
+    const isText = isComponentType(parent, EComponentType.Text);
 
     switch (true) {
       case isText && typeof child === "string":
