@@ -41,6 +41,8 @@ class Scene implements IScene {
     const objects = this.objects;
 
     this.instance = class extends Phaser.Scene {
+      updateCallback: (time?: number) => void = () => null;
+
       constructor() {
         super(config);
         this.subscribe();
@@ -75,6 +77,14 @@ class Scene implements IScene {
         if (isFunction(config.onClick)) {
           this.input.on("pointerdown", config.onClick, this);
         }
+
+        if (isFunction(config.onUpdate)) {
+          this.updateCallback = config.onUpdate;
+        }
+      }
+
+      update(time: number): void {
+        this.updateCallback(time);
       }
     };
     return this.instance;

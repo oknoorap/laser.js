@@ -3,9 +3,13 @@ import { Types } from "phaser";
 
 import createComponent, { IComponent } from "../utils/create-component";
 import { EComponentType } from "../types/enum";
-import IEvents from "../types/events";
+import IEvents, { ISceneEvents } from "../types/events";
 
-interface IGame extends IComponent, IEvents, Types.Scenes.SettingsConfig {
+interface IGame
+  extends IComponent,
+    IEvents,
+    ISceneEvents,
+    Types.Scenes.SettingsConfig {
   name: string;
 }
 
