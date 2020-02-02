@@ -6,6 +6,7 @@
     "react": "^16.12.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.149",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
@@ -22,6 +23,7 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "eol": "^0.9.1",
+    "lodash": "^4.17.15",
     "nanoid": "^2.1.8",
     "react-reconciler": "^0.24.0"
   }
