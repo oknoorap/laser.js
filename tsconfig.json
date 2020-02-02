@@ -7,13 +7,9 @@
     "esModuleInterop": true,
     "removeComments": true,
     "moduleResolution": "node",
-    "lib": ["ESNext", "DOM", "ScriptHost"],
+    "lib": ["esnext", "dom", "scripthost"],
     "baseUrl": "./src",
-    "outDir": "./dist",
-    "paths": {
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"]
-    }
+    "outDir": "./dist"
   },
   "typeRoots": ["./node_modules/phaser/types"],
   "types": ["Phaser"],
