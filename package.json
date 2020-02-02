@@ -25,6 +25,7 @@
     "eol": "^0.9.1",
     "lodash": "^4.17.15",
     "nanoid": "^2.1.8",
-    "react-reconciler": "^0.24.0"
+    "react-reconciler": "^0.24.0",
+    "xstate": "^4.7.7"
   }
 }
