@@ -1,4 +1,8 @@
 import * as Phaser from "phaser";
+import isFunction from "lodash/isFunction";
+import isEmpty from "lodash/isEmpty";
+
+import SceneEvents, { ESceneState, ESceneEventType } from "../../events/scene";
 import { EComponentType } from "../../types/enum";
 
 interface ISceneObjects {
@@ -35,9 +39,27 @@ class Scene implements IScene {
   render() {
     const config = this.config;
     const objects = this.objects;
+
     this.instance = class extends Phaser.Scene {
       constructor() {
         super(config);
+        this.subscribe();
+      }
+
+      subscribe() {
+        SceneEvents.subscribe(state => {
+          if (state.matches(ESceneState.current)) {
+            // console.log("current", { state });
+          }
+
+          if (
+            state.matches(ESceneState.change) &&
+            !isEmpty(state.context.next)
+          ) {
+            this.scene.start(state.context.next);
+            SceneEvents.send(ESceneEventType.CommitScene);
+          }
+        });
       }
 
       create(): void {
@@ -50,17 +72,9 @@ class Scene implements IScene {
           }
         }
 
-        // var titleText: string = "Starfall";
-        // this.add.text(150, 200, titleText, {
-        //   font: "128px Arial Bold",
-        //   fill: "#FBFBAC"
-        // });
-
-        // var hintText: string = "Click to start";
-        // this.add.text(300, 350, hintText, {
-        //   font: "24px Arial Bold",
-        //   fill: "#FBFBAC"
-        // });
+        if (isFunction(config.onClick)) {
+          this.input.on("pointerdown", config.onClick, this);
+        }
       }
     };
     return this.instance;
