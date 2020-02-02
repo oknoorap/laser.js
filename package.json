@@ -21,11 +21,11 @@
     "copy:pkg": "cp package.json dist && node ./scripts/build.js"
   },
   "dependencies": {
+    "@xstate/fsm": "^1.3.0",
     "classnames": "^2.2.6",
     "eol": "^0.9.1",
     "lodash": "^4.17.15",
     "nanoid": "^2.1.8",
-    "react-reconciler": "^0.24.0",
-    "xstate": "^4.7.7"
+    "react-reconciler": "^0.24.0"
   }
 }
