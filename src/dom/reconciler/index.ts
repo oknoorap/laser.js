@@ -1,9 +1,13 @@
 import ReactReconciler from "react-reconciler";
+import { updatedDiff } from "deep-object-diff";
 
 import createInstance from "./create-instance";
 import createTextInstance from "./create-text-instance";
 import appendChildToContainer from "./append-child-to-container";
 import appendInitialChild from "./append-initial-child";
+import prepareUpdate from "./prepare-update";
+import commitMount from "./commit-mount";
+import commitUpdate from "./commit-update";
 import commitTextUpdate from "./commit-text-update";
 
 const reconciler = ReactReconciler({
@@ -25,16 +29,9 @@ const reconciler = ReactReconciler({
   appendInitialChild,
 
   // props
-  prepareUpdate(
-    instance,
-    type,
-    oldProps,
-    newProps,
-    rootContainer,
-    hostContext
-  ) {},
-  commitMount() {},
-  commitUpdate(instance, payload, type, oldProps, newProps, finishedWork) {},
+  prepareUpdate,
+  commitMount,
+  commitUpdate,
   commitTextUpdate,
   prepareForCommit(containerInfo) {},
   resetAfterCommit(containerInfo) {},

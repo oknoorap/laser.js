@@ -1,6 +1,6 @@
 import * as Phaser from "phaser";
 import isFunction from "lodash/isFunction";
-import eol from "eol";
+import { updatedDiff } from "deep-object-diff";
 
 import { Instance as RootInstance } from ".";
 import GameObjectInstance, { IGameObjectInstanceProps } from "./object";
@@ -57,14 +57,14 @@ class SceneInstance implements IScene {
   }
 
   getObjects(): GameObjectInstance[] {
-    const objects = this.rootInstance.getObjectsInstance();
-    const sceneObjects = objects.filter(
+    const rootObjects = this.rootInstance.getObjectsInstance();
+    const objects = rootObjects.filter(
       item =>
         (item.getParentInstance() as SceneInstance).getConfig("id") ===
         this.config.id
     );
 
-    return sceneObjects;
+    return objects;
   }
 
   getInstance() {
@@ -73,13 +73,13 @@ class SceneInstance implements IScene {
 
   init() {
     const config = this.config;
-    const sceneObjects = this.getObjects();
+    const gameObjects = this.getObjects();
 
     class Scene extends Phaser.Scene {
       objectsMap: ObjectsMap = {};
 
       onCreate: () => void = () => null;
-      onUpdate: (time?: number) => void = () => null;
+      onUpdate: (elapsed: number, delta: number) => void = () => null;
       onDestroy: () => void = () => null;
 
       constructor() {
@@ -93,31 +93,43 @@ class SceneInstance implements IScene {
       }
 
       updateObjects() {
-        // for (const id in this.objectsMap) {
-        //   const { type, object } = this.objectsMap[id];
-        //   switch (type) {
-        //     case EComponentType.Text:
-        //       console.log({ object });
-        //       break;
-        //   }
-        // }
+        for (const gameObject of gameObjects) {
+          const { type, id } = gameObject.getProps();
+
+          const object = this.objectsMap[id].object;
+          if (!object) {
+            return;
+          }
+
+          switch (type) {
+            case EComponentType.Text:
+              const textObject = object as Phaser.GameObjects.Text;
+              const oldProps = gameObject.getTextOldProps(textObject);
+              const newProps = gameObject.getTextNewProps();
+              gameObject.updateTextProps(textObject, oldProps, newProps);
+              break;
+          }
+        }
       }
 
       create(): void {
-        for (const object of sceneObjects) {
-          const { type, id, ...props } = object.getProps();
+        for (const gameObject of gameObjects) {
+          const { type, id, ...props } = gameObject.getProps();
+          let object;
+
           switch (type) {
             case EComponentType.Text:
               const { x, y, style } = props;
-              const textNodes: string[] = props.text
-                .map((textNode: TextInstance) => eol.split(textNode.getText()))
-                .join("");
-              const object = this.add.text(x, y, textNodes, style);
-              this.objectsMap[id] = {
-                type,
-                object
-              };
+              const text = gameObject.textNodesToString();
+              object = this.add.text(x, y, text, style);
               break;
+          }
+
+          if (object) {
+            this.objectsMap[id] = {
+              type,
+              object
+            };
           }
         }
 
@@ -137,8 +149,8 @@ class SceneInstance implements IScene {
         }
       }
 
-      update(time: number): void {
-        this.onUpdate(time);
+      update(elapsed: number, delta: number): void {
+        this.onUpdate(elapsed, delta);
         this.updateObjects();
       }
     }

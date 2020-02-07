@@ -99,7 +99,7 @@ interface IMouseKeyboardComboEvent extends IKeyboardEvent {
 }
 
 export interface ISceneEvents {
-  onUpdate?: (time: number) => void;
+  onUpdate?: (elapsed: number, delta: number) => void;
   onDrag?: (params: SceneEvent<IMouseDragEvent>) => void;
   onDragEnd?: (params: SceneEvent<IMousePointerObjectEvent>) => void;
   onDragEnter?: (params: SceneEvent<IMouseTargetEvent>) => void;
