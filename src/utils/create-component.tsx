@@ -1,5 +1,5 @@
 import React, { ReactNode, Ref, useRef, useImperativeHandle } from "react";
-import { EComponentType } from "../types/enum";
+import { EComponentType } from "../types/common";
 
 export interface IComponentData {
   type: EComponentType;

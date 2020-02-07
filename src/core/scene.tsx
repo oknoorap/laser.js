@@ -2,14 +2,10 @@ import { FC, forwardRef, RefForwardingComponent } from "react";
 import { Types } from "phaser";
 
 import createComponent, { IComponent } from "../utils/create-component";
-import { EComponentType } from "../types/enum";
-import IEvents, { ISceneEvents } from "../types/events";
+import { EComponentType } from "../types/common";
+import { ISceneEvents } from "../types/events";
 
-interface IGame
-  extends IComponent,
-    IEvents,
-    ISceneEvents,
-    Types.Scenes.SettingsConfig {
+interface IGame extends IComponent, ISceneEvents, Types.Scenes.SettingsConfig {
   name: string;
 }
 

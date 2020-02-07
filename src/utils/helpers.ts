@@ -8,5 +8,7 @@ export const getPropsAttr = obj => obj["data-props"];
 export const generateId = (prefix?: string): string =>
   (prefix ? `${prefix}-` : "") + generate(ID_ALPHABET, ID_LENGTH);
 
-export const isComponentType = (obj: any, compare) =>
-  obj.props.type === compare;
+export const isComponentType = (obj: any, type) => obj.props.type === type;
+
+export const componentType = (obj: any, type) =>
+  isComponentType(obj, type) ? type : undefined;

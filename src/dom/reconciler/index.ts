@@ -1,10 +1,10 @@
 import ReactReconciler from "react-reconciler";
 
 import createInstance from "./create-instance";
+import createTextInstance from "./create-text-instance";
 import appendChildToContainer from "./append-child-to-container";
 import appendInitialChild from "./append-initial-child";
-
-const sceneManagers = [];
+import commitTextUpdate from "./commit-text-update";
 
 const reconciler = ReactReconciler({
   // Settings
@@ -13,15 +13,16 @@ const reconciler = ReactReconciler({
   supportsPersistence: true,
   supportsHydration: true,
 
+  // Create Instance
   createInstance,
-  createTextInstance: text => text,
+  createTextInstance,
 
-  appendChildToContainer: appendChildToContainer(sceneManagers),
+  appendChildToContainer,
   appendChild(parent: any, child) {
     console.log("hello", { parent, child });
     // parent.appendChild(child);
   },
-  appendInitialChild: appendInitialChild(sceneManagers),
+  appendInitialChild,
 
   // props
   prepareUpdate(
@@ -34,6 +35,7 @@ const reconciler = ReactReconciler({
   ) {},
   commitMount() {},
   commitUpdate(instance, payload, type, oldProps, newProps, finishedWork) {},
+  commitTextUpdate,
   prepareForCommit(containerInfo) {},
   resetAfterCommit(containerInfo) {},
 

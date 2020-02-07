@@ -1,44 +1,38 @@
-import GameManager from "../managers/game";
-import SceneManager from "../managers/scene";
-import ObjectManager from "../managers/object";
+import instance from "../instance";
 
-import { EComponentType } from "../../types/enum";
+import { EComponentType } from "../../types/common";
 import { getPropsAttr, getTypeAttr, generateId } from "../../utils/helpers";
 
-const createInstance = (_: string, $props: any) => {
-  const type = getTypeAttr($props);
-  const props = getPropsAttr($props);
-  let instance;
-  let defaultProps = {
+const createInstance = (_, componentProps: any) => {
+  const type = getTypeAttr(componentProps);
+  const props = getPropsAttr(componentProps);
+  const defaultProps = {
     id: generateId(type),
     ...props
   };
 
   switch (type) {
     case EComponentType.Game:
-      instance = new GameManager({
+      return instance.createGameInstance({
         ...defaultProps
       });
       break;
 
     case EComponentType.Scene:
-      instance = new SceneManager({
+      return instance.createSceneInstance({
         key: defaultProps.name,
         ...defaultProps
       });
-      break;
 
     case EComponentType.Text:
-      instance = new ObjectManager({
+      return instance.createObjectInstance({
         type,
         ...defaultProps
       });
 
     default:
-      break;
+      return;
   }
-
-  return instance;
 };
 
 export default createInstance;

@@ -1,38 +1,25 @@
 import eol from "eol";
 
-import SceneManager from "../managers/scene";
-import ObjectManager from "../managers/object";
-import { EComponentType } from "../../types/enum";
-import { isComponentType } from "../../utils/helpers";
+import GameInstance from "../instance/game";
+import SceneInstance from "../instance/scene";
+import GameObjectInstance from "../instance/object";
+import TextInstance from "../instance/text";
 
-const appendInitialChild = (sceneManagers: SceneManager[]) => (
-  parent: any,
-  child: any
-) => {
-  if (child instanceof SceneManager) {
-    sceneManagers.push(child);
+const appendInitialChild = (parent, child) => {
+  if (parent instanceof GameInstance && child instanceof SceneInstance) {
+    parent.initScene(child);
   }
 
-  if (parent instanceof SceneManager && child instanceof ObjectManager) {
-    const isText = isComponentType(child, EComponentType.Text);
-
-    switch (true) {
-      case isText:
-        parent.addObject(child, EComponentType.Text);
-        break;
-
-      default:
-        break;
-    }
+  if (parent instanceof SceneInstance && child instanceof GameObjectInstance) {
+    parent.addObject(child);
   }
 
-  if (parent instanceof ObjectManager) {
-    const isText = isComponentType(parent, EComponentType.Text);
-
+  if (parent instanceof GameObjectInstance) {
     switch (true) {
-      case isText && typeof child === "string":
-        parent.setProps({
-          text: eol.split(child as string)
+      case child instanceof TextInstance:
+        const text = (parent.getProps("text") || []).concat(child);
+        parent.addChild(child, {
+          text
         });
         break;
 

@@ -1,5 +1,6 @@
 export enum EComponentType {
   Game = "game",
   Scene = "scene",
-  Text = "text"
+  Text = "text",
+  TextNode = "text-node"
 }
