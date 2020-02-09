@@ -68,7 +68,8 @@ class GameObjectInstance implements IGameObjectInstance {
 
     for (const key in diff) {
       const newValue = diff[key];
-      object[`set${pascalcase(key)}`](newValue);
+      const fnName = `set${pascalcase(key)}`;
+      object[fnName] && object[fnName](newValue);
     }
   }
 

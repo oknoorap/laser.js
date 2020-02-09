@@ -78,16 +78,20 @@ class SceneInstance implements IScene {
     class Scene extends Phaser.Scene {
       objectsMap: ObjectsMap = {};
 
-      onCreate: () => void = () => null;
-      onUpdate: (elapsed: number, delta: number) => void = () => null;
-      onDestroy: () => void = () => null;
+      onCreate: (scene: Phaser.Scene) => void = () => null;
+      onUpdate: (
+        elapsed: number,
+        delta: number,
+        scene: Phaser.Scene
+      ) => void = () => null;
+      onDestroy: (scene: Phaser.Scene) => void = () => null;
 
       constructor() {
         super(config);
 
         for (const callback of sceneCallbackMap) {
           if (isFunction(config[callback])) {
-            this[callback] = config.onUpdate;
+            this[callback] = config[callback];
           }
         }
       }
@@ -131,6 +135,8 @@ class SceneInstance implements IScene {
               object
             };
           }
+
+          this.onCreate(this);
         }
 
         for (const [eventName, originalEventName] of sceneMouseEventsMap) {
@@ -150,7 +156,7 @@ class SceneInstance implements IScene {
       }
 
       update(elapsed: number, delta: number): void {
-        this.onUpdate(elapsed, delta);
+        this.onUpdate(elapsed, delta, this);
         this.updateObjects();
       }
     }

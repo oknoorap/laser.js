@@ -14,8 +14,8 @@ const reconciler = ReactReconciler({
   // Settings
   isPrimaryRenderer: true,
   supportsMutation: true,
-  supportsPersistence: true,
-  supportsHydration: true,
+  supportsPersistence: false,
+  supportsHydration: false,
 
   // Create Instance
   createInstance,

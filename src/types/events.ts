@@ -40,7 +40,7 @@ interface IMousePositionEvent {
   position: IVector2D;
 }
 
-export type SceneEvent<T extends {}> = T & {
+export type SceneEvent<T extends {} = {}> = T & {
   scene: Phaser.Scenes.ScenePlugin;
 };
 
@@ -99,7 +99,8 @@ interface IMouseKeyboardComboEvent extends IKeyboardEvent {
 }
 
 export interface ISceneEvents {
-  onUpdate?: (elapsed: number, delta: number) => void;
+  onCreate?: (scene: SceneEvent) => void;
+  onUpdate?: (elapsed: number, delta: number, scene: SceneEvent) => void;
   onDrag?: (params: SceneEvent<IMouseDragEvent>) => void;
   onDragEnd?: (params: SceneEvent<IMousePointerObjectEvent>) => void;
   onDragEnter?: (params: SceneEvent<IMouseTargetEvent>) => void;
